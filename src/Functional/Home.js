@@ -8,7 +8,8 @@ import {
     Switch,
     Route,
     Link,
-    useParams
+    useParams,
+    useRouteMatch
 } from "react-router-dom"  // BrowserRouter
 
 const Routes = () => {
@@ -23,6 +24,7 @@ const Routes = () => {
                         <Nav.Link><Link to="/about">About</Link></Nav.Link>
                         <Nav.Link><Link to="/contact">Contact</Link></Nav.Link>
                         <Nav.Link><Link to="/githubusers">Github Users</Link></Nav.Link>
+                        <Nav.Link><Link to="/topics">Topics</Link></Nav.Link>
                     </Nav>
                 </Container>
             </Navbar>
@@ -30,10 +32,12 @@ const Routes = () => {
             <Switch>
                 
                 <Route exact path="/"> <Home></Home> </Route>
+                <Route path="/topics"><Topics></Topics></Route>
                 <Route path="/about"> <About></About> </Route>
                 <Route path="/contact"><Contact></Contact> </Route>
                 <Route path="/githubusers"><GithubUsers></GithubUsers> </Route>
                 <Route path="/:blablabla"> <UsersDetails></UsersDetails> </Route>
+               
             </Switch>
         </>
     )
@@ -57,6 +61,13 @@ const UsersDetails = ()=>{
             })
             .catch(error => console.log('error', error));
     },[])
+
+
+    
+      
+       
+
+
     return(
      
     <div className="vh-100" style={{ backgroundColor: '#9de2ff' }}>
@@ -106,7 +117,56 @@ const UsersDetails = ()=>{
     </div>
   );
 }
-   
+
+const Topics = () => {
+    // The `path` lets us build <Route> paths that are
+    // relative to the parent route, while the `url` lets
+    // us build relative links.
+    let { path, url } = useRouteMatch();
+
+
+    
+  
+    return (
+      <div>
+        <h2>Topics</h2>
+        <ul>
+          <li>
+            <Link to={`${url}/rendering`}>Rendering with React</Link>
+          </li>
+          <li>
+            <Link to={`${url}/components`}>Components</Link>
+          </li>
+          <li>
+            <Link to={`${url}/props-v-state`}>Props v. State</Link>
+          </li>
+        </ul>
+  
+        <Switch>
+          <Route exact path={path}>
+            <h3>Please select a topic.</h3>
+          </Route>
+          <Route path={`${path}/:topicId`}>
+            <Topic />
+          </Route>
+        </Switch>
+      </div>
+    );
+  }
+
+  const Topic = () => {
+    // The <Route> that rendered this component has a
+    // path of `/topics/:topicId`. The `:topicId` portion
+    // of the URL indicates a placeholder that we can
+    // get from `useParams()`.
+    let { topicId } = useParams();
+  
+    return (
+      <div>
+        <h3>{topicId}</h3>
+      </div>
+    );
+  }
 
 const Home = () => {
 
@@ -149,11 +209,17 @@ const Contact = () => {
     )
 }
 
+
+
 const GithubUsers = () => {
     const [users, setUsers] = useState([]) // hoot for state 
     const [rerender, setRerender] = useState(true)
     // hook for perfomning the side by side effect 
     // it is mililar to componentdidmount and componentdidupdate of class based components
+
+   
+
+
 
     useEffect(
 
